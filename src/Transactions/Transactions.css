@@ -13,3 +13,42 @@
     font-weight: bold;
     background-color: #dbf8fd;
 }
+.transactions th > span {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.transactions th > span:hover {
+    color:#1679b6;
+}
+
+.transactions .asc:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -15px;
+    top: 4px;
+    width: 0;
+    height: 0;
+    border: solid #1679b6;
+    border-width: 0 3px 3px 0;
+    padding: 3px;
+    transform: rotate(45deg);
+    cursor: default;
+}
+
+.transactions .desc:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -15px;
+    top: 7px;
+    width: 0;
+    height: 0;
+    border: solid #1679b6;
+    border-width: 0 3px 3px 0;
+    padding: 3px;
+    transform: rotate(-135deg);
+    cursor: default;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 
 const TransactionRow = (props) => {
 
@@ -17,14 +17,14 @@ const TransactionRow = (props) => {
     }
 
     const displayAmount = (str) => {
-        return (str/100).toFixed(2) + " USD";
+        return (str/100).toFixed(2) + " " + props.currency;
     }
 
     return (
         <>
             <tr>
                 <td>{props.status}</td>
-                <td>{displayDate(props.createdAt)}</td>
+                <td><Link to={`/transactions/${props.id}`}>{displayDate(props.createdAt)}</Link></td>
                 <td>{props.merchantName}</td>
                 <td>{displayType(props.type)}</td>
                 <td>{displayErrorClass(props.errorClass)}</td>

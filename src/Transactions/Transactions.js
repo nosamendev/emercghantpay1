@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchTransactions } from '../store/fetchTransactionsSlice';
 import Loader from '../Loader/Loader';
 import TransactionRow from './TransactionRow/TransactionRow';
+import SearchPanel from '../SearchPanel/SearchPanel';
 import './Transactions.css';
 
 const Transactions = () => {
@@ -29,10 +30,15 @@ const Transactions = () => {
                     cardHolder={current.card_holder}
                     cardNumber={current.card_number}
                     amount={current.amount}
+                    currency={current.currency}
                 />
             });
         }         
         return items;
+    }
+
+    const sortTransactions = () => {
+
     }
 
     if (status === "loading") {
@@ -42,12 +48,13 @@ const Transactions = () => {
     return (
         <main>
             <h1>Payment Transactions</h1>
+            <SearchPanel />
             <div className="wrapper">
                 <table className="transactions">
                     <thead>
                         <tr>
-                            <th>Status</th>
-                            <th>Created at</th>
+                            <th><span onClick={sortTransactions('status')}>Status</span></th>
+                            <th><span onClick={sortTransactions('created_at')}>Created at</span></th>
                             <th>Merchant Name</th>
                             <th>Type</th>
                             <th>Error Class</th>

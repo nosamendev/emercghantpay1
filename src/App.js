@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>              
         <Route path="/" element={<Transactions />} />        
-        <Route path="/transactions/:id" element={TransactionDetails} />  
+        <Route path="/transactions/:id" element=<TransactionDetails /> />  
         <Route path="*" element={<p>404 - File not found</p>}/>        
       </Routes>
     </BrowserRouter>

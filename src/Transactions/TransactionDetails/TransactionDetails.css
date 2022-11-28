@@ -1,0 +1,22 @@
+.transaction-details {
+    border-collapse: collapse;
+    width: 50%;
+    margin: 20px auto;
+}
+
+.transaction-details th,
+.transaction-details td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.back {
+    color: #1679b6;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
