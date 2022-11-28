@@ -1,0 +1,15 @@
+.transactions {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.transactions th,
+.transactions td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.transactions th {
+    font-weight: bold;
+    background-color: #dbf8fd;
+}

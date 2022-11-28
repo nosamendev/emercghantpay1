@@ -20,6 +20,7 @@ const Transactions = () => {
             transactions.map((current, i) => {
                 return items[i] = <TransactionRow 
                     key={i}
+                    id={current.id}
                     status={current.status} 
                     createdAt={current.created_at}   
                     merchantName={current.merchant_name}
@@ -40,8 +41,9 @@ const Transactions = () => {
 
     return (
         <main>
+            <h1>Payment Transactions</h1>
             <div className="wrapper">
-                <table>
+                <table className="transactions">
                     <thead>
                         <tr>
                             <th>Status</th>

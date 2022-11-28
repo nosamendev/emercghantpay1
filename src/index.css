@@ -16,9 +16,9 @@ figure, figcaption, footer, header, address, nav, section, h1, h2, h3, h4, h5, h
 	box-sizing: border-box;
 }
 
-table, input, button, textarea {
+table, input, button, textarea, select {
 	font-family: inherit;
-	font-size: 120%;
+	font-size: 100%;
 	box-sizing: border-box;	
 }
 
@@ -31,8 +31,14 @@ body {
 	text-align: center;
 }
 
-header {
+main {
 	text-align: center;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 160%;
+  margin: 20px auto;
 }
 
 a {
@@ -42,4 +48,9 @@ a {
 
 a:hover {
 	color: #7895a7;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 20px auto;
 }
