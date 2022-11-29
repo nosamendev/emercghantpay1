@@ -1,18 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTransactions } from '../store/fetchTransactionsSlice';
+import { getTransactions, getError, loading } from '../store/fetchTransactionsSlice';
 import Loader from '../Loader/Loader';
 import TransactionRow from './TransactionRow/TransactionRow';
 import SearchPanel from '../SearchPanel/SearchPanel';
+import data from '../api/data';
 import './Transactions.css';
 
 const Transactions = () => {
     const dispatch = useDispatch();
-    const transactions = useSelector(state => state.items.transactions);
+
     const status = useSelector(state => state.items.status);
+    const error = useSelector(state => state.items.error);
+
+
+    const [transactions, setTransactions] = useState([]);
+    //remembers the <span> tag of the last sort:
+    const [sortedByTarget, setSortedByTarget] = useState(null);
+   
 
     useEffect(() => {
-        dispatch(fetchTransactions());
+        dispatch(loading('loading'));
+
+        const fetchData = async () => {  
+            try {
+                let response = await data.get('http://localhost:3000/payment_transactions');
+                dispatch(getTransactions(response.data));   
+                setTransactions(response.data);           
+
+                dispatch(loading('idle'));
+            } catch (error) {
+                dispatch(getError(error.message));
+                dispatch(loading('idle'));
+            }
+        }    
+        fetchData(); 
     }, []);
 
     const displayTransactionRows = () => {
@@ -37,12 +59,57 @@ const Transactions = () => {
         return items;
     }
 
-    const sortTransactions = () => {
 
+    const sortTransactions = (e, str) => {
+        let sorted = [...transactions];
+
+        if (sortedByTarget) {
+            if (sortedByTarget !== e.target) {
+                sortedByTarget.className = "";
+            }
+        }
+        
+
+        if (e.target.className === "" || e.target.className === "desc") {
+            sorted.sort(function(a, b){
+                let x = a[str].toLowerCase();
+                let y = b[str].toLowerCase();
+                if (x < y) {return -1}
+                if (x > y) {return 1}
+                return 0;
+            });
+    
+            setTransactions(sorted);
+                       
+            e.target.className = "asc";
+            setSortedByTarget(e.target); 
+            
+        }
+        else {
+            //className = "asc":
+            sorted.sort(function(a, b){
+                let x = a[str].toLowerCase();
+                let y = b[str].toLowerCase();
+                if (x > y) {return -1}
+                if (x < y) {return 1}
+                return 0;
+            });
+    
+            setTransactions(sorted);
+            
+            e.target.className = "desc";
+            setSortedByTarget(e.target);
+            
+        }
     }
+
+    
 
     if (status === "loading") {
         return <Loader />
+    }
+    if (error){
+        return <p>{error}</p>
     }
 
     return (
@@ -53,14 +120,14 @@ const Transactions = () => {
                 <table className="transactions">
                     <thead>
                         <tr>
-                            <th><span onClick={sortTransactions('status')}>Status</span></th>
-                            <th><span onClick={sortTransactions('created_at')}>Created at</span></th>
-                            <th>Merchant Name</th>
-                            <th>Type</th>
-                            <th>Error Class</th>
-                            <th>Card Holder</th>
-                            <th>Card Number</th>
-                            <th>Amount</th>
+                            <th><span onClick={(e) => sortTransactions(e, 'status')}>Status</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'created_at')}>Created at</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'merchant_name')}>Merchant Name</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'type')}>Type</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'error_class')}>Error Class</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'card_holder')}>Card Holder</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'card_number')}>Card Number</span></th>
+                            <th><span onClick={(e) => sortTransactions(e, 'amount')}>Amount</span></th>
                         </tr>
                     </thead>
                     <tbody>

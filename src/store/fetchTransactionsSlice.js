@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import data from '../api/data';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   transactions: [],
@@ -8,44 +6,23 @@ const initialState = {
   error:''
 };
 
-
-export const fetchTransactions = createAsyncThunk(
-  'data/fetchTransactions',
-  async () => {  
-        try {
-          const response = await data.get('http://localhost:3000/payment_transactions');
-          return response.data;
-        } catch (error) {
-          return error;
-        }
-      }
-)
-
 export const transactionsSlice = createSlice({
   name: 'transactions',
   initialState,
 
-  reducers: {},
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchTransactions.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchTransactions.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.transactions = action.payload;
-        if (action.payload.message) {
-          state.error = action.payload.message;
-          state.transactions = [];
-        }
-      })
-      .addCase(fetchTransactions.rejected, (state, action) => {
-        state.status = 'idle';
-        state.error = action.payload.message;
-        state.transactions = [];
-      });
+  reducers: {
+    getError: (state, action) => {
+      state.error = action.payload;
+    },
+    getTransactions: (state, action) => {
+      state.transactions = action.payload;
+    },
+    loading: (state, action) => {
+      state.status = action.payload;
+    }
   },
 });
+
+export const { getTransactions, getError, loading } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;
