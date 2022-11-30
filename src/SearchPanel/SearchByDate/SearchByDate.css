@@ -1,25 +1,46 @@
-form {
+.search-form {
+    display: flex;
     text-align: left;
+    padding: 10px;
 }
 
-.from > span,
-.from label,
-.to > span,
-.to label {
+.search-form .from > span,
+.search-form .from label,
+.search-form .to > span,
+.search-form .to label {
     display: inline-block;
-    margin: 10px
+    margin: 5px;
+    float: left;
 }
 
-.from > span,
-.to > span {
+.search-form .from > span,
+.search-form .to > span {
     width: 80px;
+    float: left;
+    padding-top: 5px;
 }
 
-.from input,
-.to input {
+.search-form .from input,
+.search-form .to input {
     width: 120px;
 }
 
-.button-container {
-    
+.search-form .fields {
+    padding-right: 10px;
+}
+
+.search-form .buttons {
+    padding-left: 10px;
+    border-left: 1px solid #ccc;
+}
+
+.search-form span.error {
+    display: block;
+    width: 120px;
+    font-size: 60%;
+    line-height: 10px;
+}
+
+.search-form .to {
+    clear: both;
 }

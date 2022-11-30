@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTransactions, getError, loading } from '../store/fetchTransactionsSlice';
 import Loader from '../Loader/Loader';
@@ -12,11 +12,13 @@ const Transactions = () => {
 
     const status = useSelector(state => state.items.status);
     const error = useSelector(state => state.items.error);
-    const alltransactions = useSelector(state => state.items.transactions);
+    const allTransactions = useSelector(state => state.items.transactions);
 
     const [transactions, setTransactions] = useState([]);
 
-    //remembers the 'th > span' tag of the last table sort:
+    const [transactionsSorted, setTransactionsSorted] = useState([...allTransactions]);
+
+    //remembers the 'th>span' tag of the last table sort:
     const [sortedByTarget, setSortedByTarget] = useState(null);   
 
     const [searchDates, setSearchDates] = useState({
@@ -68,6 +70,8 @@ const Transactions = () => {
         return items;
     }
 
+    //table sorting: ==================================
+
     const sortTransactions = (e, str) => {
         let sorted = [...transactions];
 
@@ -88,7 +92,8 @@ const Transactions = () => {
             setTransactions(sorted);
                        
             e.target.className = "asc";
-            setSortedByTarget(e.target);             
+            setSortedByTarget(e.target);  
+            setTransactionsSorted(sorted);           
         }
         else {
             //className = "asc":
@@ -101,11 +106,15 @@ const Transactions = () => {
             });
     
             setTransactions(sorted);
-            
+            setTransactionsSorted(sorted);
+
             e.target.className = "desc";
             setSortedByTarget(e.target);            
         }
     }
+
+    // Search by Date and Time filter: ============================
+
     const displaySearchResults = () => {
         const fromDate = new Date(searchDates.fromDate + ' ' + searchDates.fromTime);
         const toDate = new Date(searchDates.toDate + ' ' + searchDates.toTime);
@@ -120,7 +129,8 @@ const Transactions = () => {
     }
 
     const deleteFilter = () => {
-        setTransactions(alltransactions);
+        setTransactions(transactionsSorted);
+ 
         setSearchDates({
             fromDate: "", 
             fromTime: "",
@@ -129,11 +139,11 @@ const Transactions = () => {
         });
     }
 
-
     const handleSearchDateChange = (name, value) => {
-        setSearchDates({...searchDates, [name]: value});
+        setSearchDates(prevState => ({...prevState, [name]: value}));
     }
     
+//=================================================
 
     if (status === "loading") {
         return <Loader />
