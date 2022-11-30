@@ -52,3 +52,10 @@
     transform: rotate(-135deg);
     cursor: default;
 }
+
+.transactions tr td:last-child {
+    max-width: 100px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}

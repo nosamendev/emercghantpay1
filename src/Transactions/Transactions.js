@@ -12,12 +12,19 @@ const Transactions = () => {
 
     const status = useSelector(state => state.items.status);
     const error = useSelector(state => state.items.error);
-
+    const alltransactions = useSelector(state => state.items.transactions);
 
     const [transactions, setTransactions] = useState([]);
-    //remembers the <span> tag of the last sort:
-    const [sortedByTarget, setSortedByTarget] = useState(null);
-   
+
+    //remembers the 'th > span' tag of the last table sort:
+    const [sortedByTarget, setSortedByTarget] = useState(null);   
+
+    const [searchDates, setSearchDates] = useState({
+        fromDate: "", 
+        fromTime: "",
+        toDate: "",
+        toTime: ""
+    });
 
     useEffect(() => {
         dispatch(loading('loading'));
@@ -47,28 +54,27 @@ const Transactions = () => {
                     status={current.status} 
                     createdAt={current.created_at}   
                     merchantName={current.merchant_name}
+                    terminalName={current.terminal_name}
                     type={current.type}
                     errorClass={current.error_class}
                     cardHolder={current.card_holder}
                     cardNumber={current.card_number}
                     amount={current.amount}
                     currency={current.currency}
+                    uniqueId={current.unique_id}
                 />
             });
         }         
         return items;
     }
 
-
     const sortTransactions = (e, str) => {
         let sorted = [...transactions];
 
-        if (sortedByTarget) {
-            if (sortedByTarget !== e.target) {
-                sortedByTarget.className = "";
-            }
+        //if it's not sorted in the same column:
+        if (sortedByTarget && sortedByTarget !== e.target) {           
+            sortedByTarget.className = "";           
         }
-        
 
         if (e.target.className === "" || e.target.className === "desc") {
             sorted.sort(function(a, b){
@@ -82,8 +88,7 @@ const Transactions = () => {
             setTransactions(sorted);
                        
             e.target.className = "asc";
-            setSortedByTarget(e.target); 
-            
+            setSortedByTarget(e.target);             
         }
         else {
             //className = "asc":
@@ -98,11 +103,36 @@ const Transactions = () => {
             setTransactions(sorted);
             
             e.target.className = "desc";
-            setSortedByTarget(e.target);
-            
+            setSortedByTarget(e.target);            
         }
     }
+    const displaySearchResults = () => {
+        const fromDate = new Date(searchDates.fromDate + ' ' + searchDates.fromTime);
+        const toDate = new Date(searchDates.toDate + ' ' + searchDates.toTime);
+        
+        const result = transactions.filter((current, i) => {
+            const currentDate = new Date(current.created_at);
+            if ((fromDate <= currentDate) && (currentDate <= toDate)) {
+                return current;
+            }
+        });
+        setTransactions(result);
+    }
 
+    const deleteFilter = () => {
+        setTransactions(alltransactions);
+        setSearchDates({
+            fromDate: "", 
+            fromTime: "",
+            toDate: "",
+            toTime: ""
+        });
+    }
+
+
+    const handleSearchDateChange = (name, value) => {
+        setSearchDates({...searchDates, [name]: value});
+    }
     
 
     if (status === "loading") {
@@ -115,7 +145,7 @@ const Transactions = () => {
     return (
         <main>
             <h1>Payment Transactions</h1>
-            <SearchPanel />
+            <SearchPanel handleSearchDateChange={handleSearchDateChange} searchDates={searchDates} displaySearchResults={displaySearchResults} deleteFilter={deleteFilter} />
             <div className="wrapper">
                 <table className="transactions">
                     <thead>
@@ -123,11 +153,13 @@ const Transactions = () => {
                             <th><span onClick={(e) => sortTransactions(e, 'status')}>Status</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'created_at')}>Created at</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'merchant_name')}>Merchant Name</span></th>
+                            <th>Terminal Name</th>
                             <th><span onClick={(e) => sortTransactions(e, 'type')}>Type</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'error_class')}>Error Class</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'card_holder')}>Card Holder</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'card_number')}>Card Number</span></th>
                             <th><span onClick={(e) => sortTransactions(e, 'amount')}>Amount</span></th>
+                            <th>Unique ID</th>
                         </tr>
                     </thead>
                     <tbody>

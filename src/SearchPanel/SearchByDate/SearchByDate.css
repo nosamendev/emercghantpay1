@@ -1,0 +1,25 @@
+form {
+    text-align: left;
+}
+
+.from > span,
+.from label,
+.to > span,
+.to label {
+    display: inline-block;
+    margin: 10px
+}
+
+.from > span,
+.to > span {
+    width: 80px;
+}
+
+.from input,
+.to input {
+    width: 120px;
+}
+
+.button-container {
+    
+}

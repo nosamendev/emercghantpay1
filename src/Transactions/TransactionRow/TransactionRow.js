@@ -26,11 +26,13 @@ const TransactionRow = (props) => {
                 <td>{props.status}</td>
                 <td><Link to={`/transactions/${props.id}`}>{displayDate(props.createdAt)}</Link></td>
                 <td>{props.merchantName}</td>
+                <td>{props.terminalName}</td>
                 <td>{displayType(props.type)}</td>
                 <td>{displayErrorClass(props.errorClass)}</td>
                 <td>{props.cardHolder}</td>
                 <td>{props.cardNumber}</td>
                 <td>{displayAmount(props.amount)}</td>
+                <td>{props.uniqueId}</td>
             </tr>
         </>
     );
